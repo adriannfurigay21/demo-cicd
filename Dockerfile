@@ -21,9 +21,9 @@ RUN docker-php-ext-configure gd  --with-freetype=/usr/include/ --with-jpeg=/usr/
 RUN docker-php-ext-install gd
 
 
-RUN apk add autoconf && pecl install -o -f redis \
-&& rm -rf /tmp/pear \
-&& docker-php-ext-enable redis && apk del autoconf
+# RUN apk add autoconf && pecl install -o -f redis \
+# && rm -rf /tmp/pear \
+# && docker-php-ext-enable redis && apk del autoconf
 
 COPY ./config/php/local.ini /usr/local/etc/php/conf.d/local.ini
 
