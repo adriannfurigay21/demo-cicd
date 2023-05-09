@@ -48,7 +48,7 @@ jobs:
           IMAGE_TAG: latest
         run: |
           docker build -t apf-app .
-          docker tag ‘ECR app repo name’:latest aws ecr get-login-password --region ap-southeast-1 | docker login --username AWS --password-stdin 724017144222.dkr.ecr.ap-southeast-1.amazonaws.com/apf-app:$IMAGE_TAG
+          docker tag apf-app:latest aws ecr get-login-password --region ap-southeast-1 | docker login --username AWS --password-stdin 724017144222.dkr.ecr.ap-southeast-1.amazonaws.com/apf-app:$IMAGE_TAG
           docker push aws ecr get-login-password --region ap-southeast-1 | docker login --username AWS --password-stdin 724017144222.dkr.ecr.ap-southeast-1.amazonaws.com/apf-app:$IMAGE_TAG
       - name: Build nginx
         id: build-nginx-image
