@@ -43,38 +43,38 @@ jobs:
       - name: Build laravel
         id: build-php-image
         env:
-          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          ECR_REPOSITORY: ‘ECR repo name’
+          ECR_REGISTRY: aws ecr get-login-password --region ap-southeast-1 | docker login --username AWS --password-stdin 724017144222.dkr.ecr.ap-southeast-1.amazonaws.com
+          ECR_REPOSITORY: apf-app
           IMAGE_TAG: latest
         run: |
-          docker build -t ‘ECR app repo name’ .
-          docker tag ‘ECR app repo name’:latest $ECR_REGISTRY/‘ECR app repo name’:$IMAGE_TAG
-          docker push $ECR_REGISTRY/‘ECR app repo name’:$IMAGE_TAG
+          docker build -t apf-app .
+          docker tag ‘ECR app repo name’:latest aws ecr get-login-password --region ap-southeast-1 | docker login --username AWS --password-stdin 724017144222.dkr.ecr.ap-southeast-1.amazonaws.com/apf-app:$IMAGE_TAG
+          docker push aws ecr get-login-password --region ap-southeast-1 | docker login --username AWS --password-stdin 724017144222.dkr.ecr.ap-southeast-1.amazonaws.com/apf-app:$IMAGE_TAG
       - name: Build nginx
         id: build-nginx-image
         env:
-          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          ECR_REPOSITORY: ‘ECR nginx repo name’
+          ECR_REGISTRY: aws ecr get-login-password --region ap-southeast-1 | docker login --username AWS --password-stdin 724017144222.dkr.ecr.ap-southeast-1.amazonaws.com
+          ECR_REPOSITORY: apf-nginx
           IMAGE_TAG: latest
         run: |
-          docker build -f Dockerfile_Nginx -t ‘ECR nginx repo name’ .
-          docker tag ‘ECR nginx repo name’:latest $ECR_REGISTRY/‘ECR nginx repo name’:$IMAGE_TAG
-          docker push $ECR_REGISTRY/‘ECR nginx repo name’:$IMAGE_TAG
+          docker build -f Dockerfile_Nginx -t apf-nginx .
+          docker tag apf-nginx:latest aws ecr get-login-password --region ap-southeast-1 | docker login --username AWS --password-stdin 724017144222.dkr.ecr.ap-southeast-1.amazonaws.com/apf-nginx:$IMAGE_TAG
+          docker push aws ecr get-login-password --region ap-southeast-1 | docker login --username AWS --password-stdin 724017144222.dkr.ecr.ap-southeast-1.amazonaws.com/apf-nginx:$IMAGE_TAG
       - name: Download task definition
         run: |
-          aws ecs describe-task-definition --task-definition ‘task definition name’ --query taskDefinition > task-definition.json
+          aws ecs describe-task-definition --task-definition ap-demo --query taskDefinition > task-definition.json
       - name: Fill in the new app image ID in the Amazon ECS task definition
         id: app-task-def
         uses: aws-actions/amazon-ecs-render-task-definition@v1
         with:
           task-definition: task-definition.json
           container-name: app
-          image:  ‘ECR image’
+          image:  latest
         env:
           AWS_DEFAULT_REGION: ap-southeast-1
           AWS_REGION: ap-southeast-1
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_ACCESS_KEY_ID: AKIA2REWI4GPGCNKJZFX
+          AWS_SECRET_ACCESS_KEY: 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
 
       - name: Fill in the new nginx image ID in the Amazon ECS task definition
         id: web-task-def
@@ -82,17 +82,17 @@ jobs:
         with:
           task-definition: task-definition.json
           container-name: nginx
-          image: ‘ECR image’
+          image: latest
         env:
-          AWS_DEFAULT_REGION: ‘check region’
-          AWS_REGION: ‘check region’
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: ap-southeast-1
+          AWS_REGION: ap-southeast-1
+          AWS_ACCESS_KEY_ID: AKIA2REWI4GPGCNKJZFX
+          AWS_SECRET_ACCESS_KEY: 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
 
       - name: Deploy Amazon ECS task definition
         uses: aws-actions/amazon-ecs-deploy-task-definition@v1
         with:
           task-definition: ${{ steps.web-task-def.outputs.task-definition }}
-          service: ‘service name’
-          Cluster: ‘cluster name’
+          service: ap-demo
+          Cluster: apf-demo-cluster
           wait-for-service-stability: true
