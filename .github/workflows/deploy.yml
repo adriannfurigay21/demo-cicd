@@ -92,7 +92,7 @@ jobs:
       - name: Deploy Amazon ECS task definition
         uses: aws-actions/amazon-ecs-deploy-task-definition@v1
         with:
-          task-definition: ap-demo
+          task-definition: EC2
           service: ap-demo
           Cluster: apf-demo-cluster
           wait-for-service-stability: true
