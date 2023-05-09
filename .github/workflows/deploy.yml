@@ -48,8 +48,8 @@ jobs:
           IMAGE_TAG: latest
         run: |
           docker build -t apf-app .
-          docker tag apf-app:latest aws ecr get-login-password --region ap-southeast-1 | docker login --username AWS --password-stdin 724017144222.dkr.ecr.ap-southeast-1.amazonaws.com/apf-app:$IMAGE_TAG
-          docker push aws ecr get-login-password --region ap-southeast-1 | docker login --username AWS --password-stdin 724017144222.dkr.ecr.ap-southeast-1.amazonaws.com/apf-app:$IMAGE_TAG
+          docker tag apf-app:latest aws ecr get-login-password --region ap-southeast-1 | docker login --username AWS --password-stdin 724017144222.dkr.ecr.ap-southeast-1.amazonaws.com/apf-app:latest
+          docker push aws ecr get-login-password --region ap-southeast-1 | docker login --username AWS --password-stdin 724017144222.dkr.ecr.ap-southeast-1.amazonaws.com/apf-app:latest
       - name: Build nginx
         id: build-nginx-image
         env:
@@ -58,8 +58,8 @@ jobs:
           IMAGE_TAG: latest
         run: |
           docker build -f Dockerfile_Nginx -t apf-nginx .
-          docker tag apf-nginx:latest aws ecr get-login-password --region ap-southeast-1 | docker login --username AWS --password-stdin 724017144222.dkr.ecr.ap-southeast-1.amazonaws.com/apf-nginx:$IMAGE_TAG
-          docker push aws ecr get-login-password --region ap-southeast-1 | docker login --username AWS --password-stdin 724017144222.dkr.ecr.ap-southeast-1.amazonaws.com/apf-nginx:$IMAGE_TAG
+          docker tag apf-nginx:latest aws ecr get-login-password --region ap-southeast-1 | docker login --username AWS --password-stdin 724017144222.dkr.ecr.ap-southeast-1.amazonaws.com/apf-nginx:latest
+          docker push aws ecr get-login-password --region ap-southeast-1 | docker login --username AWS --password-stdin 724017144222.dkr.ecr.ap-southeast-1.amazonaws.com/apf-nginx:latest
       - name: Download task definition
         run: |
           aws ecs describe-task-definition --task-definition ap-demo --query taskDefinition > task-definition.json
