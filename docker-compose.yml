@@ -1,17 +1,12 @@
-version: "3"
+version: "3.8"
 services:
   app:
     build:
       context: .
       dockerfile: Dockerfile
-    image: larvel-app
+    image: laraapp
     container_name: app
     restart: unless-stopped
-    environment:
-      DB_HOST: db
-      DB_PASSWORD: root
-      SESSION_DRIVER: redis
-      REDIS_HOST: redis
     volumes:
       - ./:/var/www
       - ./config/php/local.ini:/usr/local/etc/php/conf.d/local.ini
@@ -20,7 +15,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile_Nginx
-    image: larvel-nginx 
+    image: laranginx 
     container_name: webserver 
     restart: unless-stopped
     ports:
@@ -32,14 +27,14 @@ services:
       - app  
 
   db:
-    image: mysql:5.7.22
+    image: mysql:8
     container_name: db
     environment:
-      MYSQL_DATABASE: laravel
-      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: db1
+      MYSQL_ROOT_PASSWORD: "123123123"
     volumes:
       - dbdata:/var/lib/mysql/
 
 volumes:
   dbdata:   
-    driver: local 
+    driver: local
